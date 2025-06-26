@@ -34,3 +34,11 @@ For example:
 ``` bash
 python3 sample.py processed_privacy/unlearn.json processed_privacy/unlearn_0.2.json
 ```
+
+## Format data
+
+> The code is dedicated to knowundo data.
+
+``` bash
+./qa2text.sh processed_privacy/unlearn_0.2.json
+```
