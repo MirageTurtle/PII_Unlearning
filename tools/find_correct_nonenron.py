@@ -111,7 +111,7 @@ def main():
         if not args.janus_file or not args.janus_file.is_file():
             raise FileNotFoundError(f"Janus file {args.janus_file} does not exist.")
         janus_email_data = json.loads(args.janus_file.read_text())
-        janus_email_data = [item["email"] for item in janus_email_data]
+        janus_email_data = [item["answer"] for item in janus_email_data]
 
     all_correct_nonenron_data = find_correct_nonenron_data(
         qa_log_list_file, no_janus, janus_email_data
