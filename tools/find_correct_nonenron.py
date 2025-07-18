@@ -96,7 +96,7 @@ def find_correct_nonenron_data(
         correct_nonenron_data = find_correct_nonenron_data_from_one_qa_log(
             qa_log_file, no_janus, janus_email_data
         )
-        all_correct_nonenron_data[qa_log_file.name] = correct_nonenron_data
+        all_correct_nonenron_data[str(qa_log_file)] = correct_nonenron_data
     return all_correct_nonenron_data
 
 
