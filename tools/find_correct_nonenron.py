@@ -122,3 +122,7 @@ def main():
     else:
         with output_file.open("w", encoding="utf-8") as f:
             json.dump(all_correct_nonenron_data, f, indent=2)
+
+
+if __name__ == "__main__":
+    main()
