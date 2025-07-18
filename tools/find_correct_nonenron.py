@@ -65,15 +65,15 @@ def find_correct_nonenron_data_from_one_qa_log(
     qa_log_data = json.loads(qa_log_file.read_text())
     for item in qa_log_data:
         gt = item["gt"]
-        # if non-enron/correct/not used in janus
-        if (
-            gt.endswith("@enron.com")
-            or gt.lower() not in item["response"].lower()
-            or (no_janus and gt in janus_email_data)
-        ):
-            incorrect_nonenron_data.append(item)
-        else:
+        # if enron/used in janus
+        if gt.endswith("@enron.com") or (no_janus and gt in janus_email_data):
+            continue
+        # if correct
+        elif gt.lower() in item["response"].lower():
             correct_nonenron_data.append(item)
+        # if incorrect
+        else:
+            incorrect_nonenron_data.append(item)
     return correct_nonenron_data, incorrect_nonenron_data
 
 
