@@ -40,10 +40,16 @@ def parse_args():
     )
     parser.add_argument(
         "--sample_size",
-        "-s",
+        "-ss",
+        type=int,
+        help="Number of items to sample.",
+    )
+    parser.add_argument(
+        "--sample_ratio",
+        "-sr",
         type=float,
         default=0.2,
-        help="Fraction or number of items to sample.",
+        help="Fraction of items to sample.",
     )
     parser.add_argument(
         "--no_seed",
@@ -71,8 +77,15 @@ def main():
     if not args.no_seed:
         freeze_random_state(args.seed)
 
+    sample_size = args.sample_size
+    if sample_size is None:
+        print(
+            f"[WARNING] Sample size not specified, using sample ratio: {args.sample_ratio}"
+        )
+        sample_size = args.sample_ratio
+
     # Sample the data
-    sampled_data, unsampled_data = sample_data(data, args.sample_size)
+    sampled_data, unsampled_data = sample_data(data, sample_size)
 
     # Write the sampled data to the output file
     with args.sampled_data_file.open("w", encoding="utf-8") as file:
