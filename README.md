@@ -73,3 +73,7 @@ Sample 50 data from `unlearn.json`:
 ``` bash
 python3 sample.py -ss 50 processed_privacy/original/unlearn.json processed_privacy/sampled/janus50.json /dev/null
 ```
+
+# IDK
+
+The folder `idk/` is for IDK unlearning data.
