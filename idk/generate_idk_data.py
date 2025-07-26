@@ -75,6 +75,18 @@ def parse_args() -> argparse.Namespace:
         default="answer",
         help="Key for the answer in the original data.",
     )
+    parser.add_argument(
+        "--no_seed",
+        action="store_true",
+        help="If set, do not freeze the random state for reproducibility.",
+    )
+    parser.add_argument(
+        "--seed",
+        type=int,
+        default=42,
+        help="Seed for random sampling. Default is 42.",
+    )
+
     return parser.parse_args()
 
 
@@ -84,6 +96,10 @@ def main():
     # Read original data and IDK data
     original_data = read_json(args.original_data_file)
     idk_data = read_json(args.idk_data_file)
+
+    # Freeze the random state if no_seed is not set
+    if not args.no_seed:
+        freeze_random_state(args.seed)
 
     # Generate IDK data
     generated_idk_data = generate_idk_data(original_data, idk_data, args.answer_key)
