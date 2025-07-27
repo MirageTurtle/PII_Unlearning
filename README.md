@@ -74,6 +74,26 @@ Sample 50 data from `unlearn.json`:
 python3 sample.py -ss 50 processed_privacy/original/unlearn.json processed_privacy/sampled/janus50.json /dev/null
 ```
 
+## IDK data
+
+``` bash
+python3 idk/generate_idk_data.py processed_privacy/sampled/unlearn_0.2.json idk/idontknow.jsonl processed_privacy/idk/unlearn_0.2_idk.json
+python3 idk/generate_idk_data.py processed_privacy/sampled/unlearn_0.5.json idk/idontknow.jsonl processed_privacy/idk/unlearn_0.5_idk.json
+```
+
+# enron
+
+## IDK data
+
+``` bash
+python3 idk/generate_idk_data.py enron/original_qa/forget02.json idk/idontknow.jsonl enron/idk_qa/forget02_idk.json
+python3 idk/generate_idk_data.py enron/original_qa/forget05.json idk/idontknow.jsonl enron/idk_qa/forget05_idk.json
+```
+
 # IDK
 
-The folder `idk/` is for IDK unlearning data.
+``` bash
+idk
+├── generate_idk_data.py  # the code for generating idk data
+└── idontknow.jsonl       # the 100 idk source data
+```
