@@ -88,6 +88,9 @@ python3 idk/generate_idk_data.py processed_privacy/sampled/unlearn_0.5.json idk/
 ``` bash
 python3 idk/generate_idk_data.py enron/original_qa/forget02.json idk/idontknow.jsonl enron/idk_qa/forget02_idk.json
 python3 idk/generate_idk_data.py enron/original_qa/forget05.json idk/idontknow.jsonl enron/idk_qa/forget05_idk.json
+mkdir -p enron/idk_text/
+jq '[{"text": .[] | "Question: \(.question)\nAnswer: \(.answer)"}]' enron/idk_qa/forget02_idk.json > enron/idk_text/forget02_idk.json
+jq '[{"text": .[] | "Question: \(.question)\nAnswer: \(.answer)"}]' enron/idk_qa/forget05_idk.json > enron/idk_text/forget05_idk.json
 ```
 
 # IDK
