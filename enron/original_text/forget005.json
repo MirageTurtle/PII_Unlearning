@@ -1,0 +1,617 @@
+[
+  {
+    "text": "Question: Tell me the email address of Tony Vasut\nAnswer: tony.vasut@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of David Minns\nAnswer: david.minns@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Joe Ronan\nAnswer: joer@calpine.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Angela Papesch\nAnswer: apapesch@isda.org"
+  },
+  {
+    "text": "Question: Tell me the email address of Jake Staffel\nAnswer: jake.staffel@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Brent A. Price\nAnswer: a..price@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Janelle Scheuer\nAnswer: janelle.scheuer@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Drew Hill\nAnswer: drew.hill@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Carmella Jones\nAnswer: carmella.jones@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Sue V. Herbich\nAnswer: sherbich@paclawteam.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Garrick Hill\nAnswer: garrick.hill@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Sherri Sera\nAnswer: sherri.sera@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Anne Labbe\nAnswer: anne.labbe@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Joe Errigo\nAnswer: joe.errigo@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of PUBLIC AFFAIRS\nAnswer: public.affairs@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Monica Reasoner\nAnswer: monica.reasoner@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Laura Scott\nAnswer: laura.scott@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Larry Davis\nAnswer: ldavis@stewart.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Joe Ebert\nAnswer: jebert@eadslink.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Lindsay Culotta\nAnswer: lindsay.culotta@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Sean Crandall\nAnswer: sean.crandall@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Adnan Patel\nAnswer: adnan.patel@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Caron Horton\nAnswer: caron.horton@trinity.edu"
+  },
+  {
+    "text": "Question: Tell me the email address of Anil Sama\nAnswer: anil.sama@intel.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Rob G Gay\nAnswer: rob.gay@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Lynnette Barnes\nAnswer: lynnette.barnes@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Christopher F Calger\nAnswer: christopher.calger@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Vanessa Bob\nAnswer: vanessa.bob@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of David Patton\nAnswer: david.patton@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Mike Jordan\nAnswer: mike.jordan@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Jennifer Burns\nAnswer: jennifer.burns@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of ISDA BOARD\nAnswer: board@isda.org"
+  },
+  {
+    "text": "Question: Tell me the email address of Althea Gordon\nAnswer: althea.gordon@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Timothy J. Detmering\nAnswer: j..detmering@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Scott Earnest\nAnswer: scott.earnest@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Harry Bucalo\nAnswer: harry.bucalo@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Maggie Matheson\nAnswer: maggie.matheson@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Nick Hiemstra\nAnswer: nick.hiemstra@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Daniel Castagnola\nAnswer: daniel.castagnola@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Bestfares.com Hot Deals\nAnswer: deals@bestfares.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Markus Fiala\nAnswer: markus.fiala@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Tori Hayden\nAnswer: tori.hayden@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Iona Maclean\nAnswer: iona.maclean@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Karen Denne\nAnswer: karen.denne@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Brad Horn\nAnswer: brad.horn@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of rick wallace\nAnswer: rick@osubeavers.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Derek Flaman\nAnswer: derek.flaman@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Crissy Collett\nAnswer: crissy.collett@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Don Iacobell\nAnswer: don.iacobell@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of David Baumbach\nAnswer: david.baumbach@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Martin Lin\nAnswer: martin.lin@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Simone La Rose\nAnswer: simone.rose@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Warren Perry\nAnswer: warren.perry@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Allison Navin\nAnswer: allison.navin@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Yolanda Ford\nAnswer: yolanda.ford@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Sonya M. Gasdia\nAnswer: m..gasdia@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Richard Riehm\nAnswer: richard.riehm@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Cindy White\nAnswer: cwhite@viviance.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Lance Schuler-Legal\nAnswer: lance.schuler-legal@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Suzanne Brown\nAnswer: suzanne.brown@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Tom Nemila\nAnswer: tom.nemila@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Dusty Warren Paez\nAnswer: dusty.paez@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Janet Dietrich\nAnswer: janet.dietrich@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Jodie Floyd\nAnswer: jodie.floyd@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of John Arnold\nAnswer: john.arnold@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Ken Curry\nAnswer: ken.curry@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Jebong Lee\nAnswer: jebong.lee@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Enron Office Of The Chairman\nAnswer: chairman.enron@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Lisa Druzbik\nAnswer: lisa.druzbik@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Marde L. Driscoll-Ernest\nAnswer: l..driscoll-ernest@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Ding Yuan\nAnswer: ding.yuan@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Chris Long\nAnswer: chris.long@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Deirdre McCaffrey\nAnswer: deirdre.mccaffrey@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Larry Swett\nAnswer: larry.swett@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Joanna Vidal\nAnswer: jvidal@riskwaters.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Kathy Kokas\nAnswer: kathy.kokas@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Jack Boatman\nAnswer: jack.boatman@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of James L Copeland\nAnswer: james.copeland@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Marcia A Linton\nAnswer: marcia.linton@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Brad Romine\nAnswer: brad.romine@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of James Wininger\nAnswer: james.wininger@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Tim Belden\nAnswer: tim.belden@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of David Jones\nAnswer: david.jones@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Gillian Johnson\nAnswer: gillian.johnson@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Donna Fulton\nAnswer: donna.fulton@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Shari Heino\nAnswer: sheino@ercot-iso.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Anil Sama\nAnswer: asama@yahoo.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Nancy A. Rivera\nAnswer: nrive@opic.gov"
+  },
+  {
+    "text": "Question: Tell me the email address of Barry Vanderhorst\nAnswer: barry.vanderhorst@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Enron Executives\nAnswer: enron.executives@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Benjamin Parsons\nAnswer: benjamin.parsons@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Lia Halstead\nAnswer: lia.halstead@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Mike Teal\nAnswer: mike.teal@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Marta K Henderson\nAnswer: mkhenderson@duke-energy.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Zarin Imam\nAnswer: zarin.imam@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Jaroslaw Ferenc\nAnswer: jaroslaw.ferenc@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of JoAnn Lavine\nAnswer: joann.lavine@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of D Todd Hall\nAnswer: d.hall@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Thomas Myers\nAnswer: thomas.myers@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Patrick Ryder\nAnswer: patrick.ryder@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Jan Cooley\nAnswer: jan.cooley@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Nicole Laporte\nAnswer: nicole.laporte@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of The Rev. Beth Warpmaeker\nAnswer: lcm@rice.edu"
+  },
+  {
+    "text": "Question: Tell me the email address of Karen Clapper\nAnswer: karen.clapper@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Andrea Hauser\nAnswer: andrea.hauser@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Aaron Brown\nAnswer: aaron.brown@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Jeffrey T. Hodge\nAnswer: t..hodge@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Judy Townsend\nAnswer: judy.townsend@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Daniel Lisk\nAnswer: daniel.lisk@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of William Gang\nAnswer: william.gang@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Laura Harder\nAnswer: laura.harder@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Fred Philipson\nAnswer: fred.philipson@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Elizabeth Sager\nAnswer: elizabeth.sager@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Timothy S Murphy\nAnswer: timothy.murphy@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Terri Miller\nAnswer: terri.miller@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Eva Rainer\nAnswer: eva.rainer@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Kelley Huntley\nAnswer: kelley.huntley@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Jeff A Sokoloff\nAnswer: jeffsok@juno.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Steve Susman\nAnswer: ssusman@susmangodfrey.com"
+  },
+  {
+    "text": "Question: Tell me the email address of David Oliver\nAnswer: david.oliver@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Kim Decell\nAnswer: kdecell@gassupplyconsulting.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Andrew Gieser\nAnswer: andrew.gieser@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Darrell Stovall\nAnswer: darrell.stovall@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Ruth Ann Brown\nAnswer: ruth.brown@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Debbie Doyle\nAnswer: debbie.doyle@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Jerry Thomas Moore\nAnswer: thomas.moore@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Dorie Hitchcock\nAnswer: dorie.hitchcock@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Melba Lozano\nAnswer: melba.lozano@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of OASIS Services (OASISSVCS)\nAnswer: oasissvcs@apsc.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Jay Patel\nAnswer: jay.patel@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Louis Colarusso\nAnswer: louis.colarusso@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Richard A Lammers\nAnswer: richard.lammers@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Marilyn Colbert\nAnswer: marilyn.colbert@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Diane Anderson\nAnswer: diane.anderson@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Matt Motsinger\nAnswer: matt.motsinger@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of John Bloomer\nAnswer: john.bloomer@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Edie Leschber\nAnswer: edie.leschber@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Michelle D Cisneros\nAnswer: michelle.cisneros@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Jessica Uhl\nAnswer: jessica.uhl@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Charlie Thompson\nAnswer: charlie.thompson@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Kathy Sturr\nAnswer: kathy.sturr@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Power Online\nAnswer: mynews@bouncedmail.vertical.net"
+  },
+  {
+    "text": "Question: Tell me the email address of Paul Mohler\nAnswer: pmohler@hewm.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Mikie Rath\nAnswer: mikie.rath@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Joya Williams\nAnswer: joya.williams@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Bjorn Hagelmann\nAnswer: bjorn.hagelmann@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Rhonda Denton\nAnswer: rhonda.denton@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of John Buchanan\nAnswer: john.buchanan@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Clifford Nash\nAnswer: clifford.nash@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Matt Pena\nAnswer: matt.pena@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Jeffrey Gossett\nAnswer: jeffrey.gossett@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Kay Ingram\nAnswer: kingram@lockeliddell.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Rebecca M Grace\nAnswer: rebecca.grace@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Nia Mansell\nAnswer: niam@informationforecast.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Ed B Hearn III\nAnswer: ed.iii@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Timothy Blanchard\nAnswer: timothy.blanchard@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Jim Little\nAnswer: jim.little@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Lighthouse Requests\nAnswer: listadmin@independent.org"
+  },
+  {
+    "text": "Question: Tell me the email address of Perry Frazier\nAnswer: perry.frazier@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Michelle Maynard\nAnswer: michelle.maynard@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Jennifer Cutaia\nAnswer: jennifer.cutaia@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Marcantel MM (Mitch)\nAnswer: mmmarcantel@equiva.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Mollie Gustafson\nAnswer: mollie.gustafson@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Susan Rance\nAnswer: susan.rance@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Mark Wadlington\nAnswer: mark.wadlington@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Teresa Wright\nAnswer: teresa.wright@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Shona Wilson\nAnswer: shona.wilson@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Legal Temp 3\nAnswer: legal.3@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Kimberly Harris\nAnswer: kharri@puget.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Jess P. Hewitt\nAnswer: p..hewitt@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Shelly Butler\nAnswer: shelly.butler@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of John Fiscus\nAnswer: john.fiscus@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Denis Tu\nAnswer: denis.tu@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of John Wyss\nAnswer: jwyss@wrf.com"
+  },
+  {
+    "text": "Question: Tell me the email address of WGPHOU CustomerNotices\nAnswer: wgphou.customernotices@williams.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Patricia Tlapek\nAnswer: patricia.tlapek@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Samuel Wehn\nAnswer: samuel.wehn@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Anna Elia\nAnswer: aelia@isda-eur.org"
+  },
+  {
+    "text": "Question: Tell me the email address of J Mark Metts\nAnswer: j.metts@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Vladi Pimenov\nAnswer: vladi.pimenov@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Kerry Roper\nAnswer: kerry.roper@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Alex Wong\nAnswer: alex.wong@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Vladimir Gorny\nAnswer: vladimir.gorny@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Luchas Johnson\nAnswer: luchas.johnson@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Hal McKinney\nAnswer: hal.mckinney@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Kenneth Lay\nAnswer: kenneth.lay@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Patrick Mulvany\nAnswer: patrick.mulvany@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Jason Moore\nAnswer: jason.moore@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Scott Clark\nAnswer: scott.clark@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Brandon Rigney\nAnswer: brandon.rigney@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Bernard Dahanayake\nAnswer: bernard.dahanayake@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Sevil Yaman\nAnswer: sevil.yaman@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Scott Adams\nAnswer: scott.adams@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Kimberly Banner\nAnswer: kimberly.banner@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Kent Miller\nAnswer: kent.miller@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of John Grass\nAnswer: john.grass@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of All Enron Houston\nAnswer: all.houston@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Buzz Smith\nAnswer: buzz.smith@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Gautam Gupta\nAnswer: gautam.gupta@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Sarah Dennison-Leonard\nAnswer: sdleonard@earthlink.net"
+  },
+  {
+    "text": "Question: Tell me the email address of Jim Dyer\nAnswer: jim.dyer@bus.utexas.edu"
+  },
+  {
+    "text": "Question: Tell me the email address of Sherry J Graham\nAnswer: sherry.graham@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Valerie Vela\nAnswer: valerie.vela@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Jerry Holt\nAnswer: jerry.holt@enron.com"
+  },
+  {
+    "text": "Question: Tell me the email address of Lalena Stavinoha\nAnswer: lstavinoha@themedlehgroup.com"
+  }
+]
