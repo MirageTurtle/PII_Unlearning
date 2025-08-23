@@ -93,6 +93,13 @@ jq '[{"text": .[] | "Question: \(.question)\nAnswer: \(.answer)"}]' enron/idk_qa
 jq '[{"text": .[] | "Question: \(.question)\nAnswer: \(.answer)"}]' enron/idk_qa/forget05_idk.json > enron/idk_text/forget05_idk.json
 ```
 
+## sample 0.1 and 0.05 data
+
+``` bash
+python3 sample.py -sr 0.1 enron/original_qa/forget10.json enron/original_qa/forget01.json /dev/null
+python3 sample.py -sr 0.05 enron/original_qa/forget10.json enron/original_qa/forget005.json /dev/null
+```
+
 # IDK
 
 ``` bash
