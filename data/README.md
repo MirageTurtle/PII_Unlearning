@@ -1,15 +1,15 @@
 # KnowUnDo
 
-`KnowUnDo_privacy` and `processed_privacy` both are KnowUnDo data
-folders.
+`knowundo/KnowUnDo_privacy` and `knowundo/processed_privacy` both are
+KnowUnDo data folders.
 
 ## Data processing
 
 You can generate the dataset for LLaMA-Factory by running:
 
 ``` bash
-jq '.[0].train | map({question: .text, answer: .labels})' ./KnowUnDo_privacy/retention.json > ./processed_privacy/original/retention.json
-jq '.[0].train | map({question: .text, answer: .labels})' ./KnowUnDo_privacy/unlearn.json > ./processed_privacy/original/unlearn.json
+jq '.[0].train | map({question: .text, answer: .labels})' ./knowundo/KnowUnDo_privacy/retention.json > ./knowundo/processed_privacy/original/retention.json
+jq '.[0].train | map({question: .text, answer: .labels})' ./knowundo/KnowUnDo_privacy/unlearn.json > ./knowundo/processed_privacy/original/unlearn.json
 ```
 
 ## Forget data sampling
