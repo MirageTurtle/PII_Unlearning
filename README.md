@@ -32,7 +32,7 @@ The intended workflow is:
    `gradient`, `hidden-layer activation`, `CKA`, `knowledge-graph association`, and forgetting scores.
 4. Run the correlation scripts in `analysis/` to measure how those features align with forgetting behavior.
 
-## GA, NPO, and DPO Baselines
+## GA, NPO, DPO, and TV Baselines
 
 Train the target model as described in the paper and prepare your training
 environment before running unlearning. Pass the local Hugging Face model directory with
@@ -53,6 +53,7 @@ All methods use the bundled Enron forget set selected by `--forget_rate`.
 | `dpo` | Not used | Bundled IDK data by default |
 | `dpo_gdr` | Required | Bundled IDK data by default |
 | `dpo_klr` | Required | Bundled IDK data by default |
+| `tv` | Not used | Not used |
 
 Supply `--retain_data_file` for GDR and KLR variants. DPO methods automatically
 select the IDK text file for the chosen forget rate; use `--positive_data_file`
@@ -67,29 +68,44 @@ command):
 
 ```bash
 # GA
-bash baseline/scripts/unlearn_ga_npo_dpo_enron.sh \
+bash baseline/scripts/unlearn_ga_npo_dpo_tv.sh \
   --algo ga \
   --model_dir ./models/target \
   --forget_rate 0.2
 
 # NPO with a retain-data loss
-bash baseline/scripts/unlearn_ga_npo_dpo_enron.sh \
+bash baseline/scripts/unlearn_ga_npo_dpo_tv.sh \
   --algo npo_gdr \
   --model_dir ./models/target \
   --forget_rate 0.2 \
   --retain_data_file ./data/retain.txt
 
 # DPO with the bundled IDK positive responses
-bash baseline/scripts/unlearn_ga_npo_dpo_enron.sh \
+bash baseline/scripts/unlearn_ga_npo_dpo_tv.sh \
   --algo dpo \
   --model_dir ./models/target \
   --forget_rate 0.5
+
+# TV with a task-vector scaling coefficient
+bash baseline/scripts/unlearn_ga_npo_dpo_tv.sh \
+  --algo tv \
+  --model_dir ./models/target \
+  --forget_rate 0.2 \
+  --alpha 1.0
 ```
 
 The script supports Enron forget rates `0.2` and `0.5` (default: `0.2`).
 Each invocation trains one model. The default output is
 `ckpt/enron/ALGO/forget_RATE` under the repository root, using the lowercase
 algorithm name; override it with `--out_dir`.
+
+TV first fine-tunes the target on the forget set, saving an intermediate model
+to `<out_dir>_ft`. It then subtracts the scaled fine-tuning weight difference
+from the target and saves the final model to `<out_dir>`. Use `--alpha` to set
+the non-negative scaling coefficient (default: `1.0`); this option is only
+accepted for TV. The shared training options below control TV's fine-tuning
+step. The final TV directory currently saves model files; use the original
+tokenizer directory when loading it.
 
 Launcher defaults follow the existing script: 10 epochs, learning rate `1e-5`,
 per-device batch size 1, and maximum sequence length 2048. Set `--epochs`, `--lr`,
