@@ -32,6 +32,75 @@ The intended workflow is:
    `gradient`, `hidden-layer activation`, `CKA`, `knowledge-graph association`, and forgetting scores.
 4. Run the correlation scripts in `analysis/` to measure how those features align with forgetting behavior.
 
+## GA, NPO, and DPO Baselines
+
+Train the target model as described in the paper and prepare your training
+environment before running unlearning. Pass the local Hugging Face model directory with
+`--model_dir`; the tokenizer is loaded from the same directory unless
+`--tokenizer_dir` is provided.
+
+Use `--algo` to select a method. Names are case-insensitive; the default is `ga`.
+All methods use the bundled Enron forget set selected by `--forget_rate`.
+
+| Algorithm | Retain data | Positive data |
+| --- | --- | --- |
+| `ga` | Not used | Not used |
+| `ga_gdr` | Required | Not used |
+| `ga_klr` | Required | Not used |
+| `npo` | Not used | Not used |
+| `npo_gdr` | Required | Not used |
+| `npo_klr` | Required | Not used |
+| `dpo` | Not used | Bundled IDK data by default |
+| `dpo_gdr` | Required | Bundled IDK data by default |
+| `dpo_klr` | Required | Bundled IDK data by default |
+
+Supply `--retain_data_file` for GDR and KLR variants. DPO methods automatically
+select the IDK text file for the chosen forget rate; use `--positive_data_file`
+to supply your own positive responses. Retain and positive inputs accept `.txt`
+or `.json` files; JSON must contain a list of strings or objects with a `text`
+field. Custom positive data must match the forget set in sample count and
+question order. Retain data is only accepted by GDR/KLR variants, and positive
+data is only accepted by DPO methods.
+
+Examples from the repository root (provide your own retain data for the second
+command):
+
+```bash
+# GA
+bash baseline/scripts/unlearn_ga_npo_dpo_enron.sh \
+  --algo ga \
+  --model_dir ./models/target \
+  --forget_rate 0.2
+
+# NPO with a retain-data loss
+bash baseline/scripts/unlearn_ga_npo_dpo_enron.sh \
+  --algo npo_gdr \
+  --model_dir ./models/target \
+  --forget_rate 0.2 \
+  --retain_data_file ./data/retain.txt
+
+# DPO with the bundled IDK positive responses
+bash baseline/scripts/unlearn_ga_npo_dpo_enron.sh \
+  --algo dpo \
+  --model_dir ./models/target \
+  --forget_rate 0.5
+```
+
+The script supports Enron forget rates `0.2` and `0.5` (default: `0.2`).
+Each invocation trains one model. The default output is
+`ckpt/enron/ALGO/forget_RATE` under the repository root, using the lowercase
+algorithm name; override it with `--out_dir`.
+
+Launcher defaults follow the existing script: 10 epochs, learning rate `1e-5`,
+per-device batch size 1, and maximum sequence length 2048. Set `--epochs`, `--lr`,
+`--per_device_batch_size`, and `--max_len` to match your experiment configuration.
+NPO, DPO, and KLR methods automatically load a reference copy of the target model.
+
+Use `--help` for all options or append `--dry-run` to check paths and preview the
+command without starting training. Set `PYTHON_BIN` to choose the interpreter in
+your training environment. Data paths are located relative to the script;
+user-supplied relative paths are resolved from the current working directory.
+
 ## Analysis Scripts
 
 The main correlation scripts are in `analysis/`: These scripts compute Pearson and Spearman correlation between forgetting scores and different hidden or structural features.
@@ -110,4 +179,3 @@ python -m analysis.knowledge_graph_correlation --model npo
 ## Citation
 
 If you use this benchmark or build on this analysis code, please cite the corresponding project paper or repository once public metadata is available.
-
