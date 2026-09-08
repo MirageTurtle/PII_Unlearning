@@ -1,11 +1,13 @@
-from .utils import load_model_and_tokenizer, load_model
-from .dataset import ForgetRetainDataset
+"""Iterative unlearning with the GA, NPO, and DPO loss branches."""
 
 import torch
 import torch.nn.functional as F
-from torch.cuda import device_count
 import transformers
-from transformers import Trainer, AutoModelForCausalLM
+from torch.cuda import device_count
+from transformers import AutoModelForCausalLM, Trainer
+
+from .dataset import ForgetRetainDataset
+from .utils import load_model, load_model_and_tokenizer
 
 
 def unlearn(
@@ -22,14 +24,15 @@ def unlearn(
     resume_from_checkpoint: bool = False,
     positive_data_file: str | None = None,
 ):
+    """Train an unlearning model with optional retain and positive datasets."""
     if "gd" in loss_type:
-        assert (
-            retain_data_file is not None
-        ), "Retain data must be specified for grad_diff."
+        assert retain_data_file is not None, (
+            "Retain data must be specified for grad_diff."
+        )
     if "dpo" in loss_type:
-        assert (
-            positive_data_file is not None
-        ), "Positive data must be specified for dpo."
+        assert positive_data_file is not None, (
+            "Positive data must be specified for dpo."
+        )
 
     model, tokenizer = load_model_and_tokenizer(model_dir, tokenizer_dir=tokenizer_dir)
 
@@ -85,7 +88,7 @@ class IterativeUnlearner(Trainer):
         loss_type: str = "ga",
         ref_model: AutoModelForCausalLM | None = None,
         beta: float = 0.1,
-        **kwargs
+        **kwargs,
     ):
         self.loss_type = loss_type
         self.ref_model = ref_model
@@ -93,36 +96,33 @@ class IterativeUnlearner(Trainer):
 
         if ref_model is not None:
             assert "po" in self.loss_type or "kl" in self.loss_type
-            ref_model = ref_model.eval()
+            ref_model.eval()
 
         super().__init__(*args, **kwargs)
+
+    @staticmethod
+    def _forward_batch(model, batch):
+        """Apply the existing label and attention-mask defaults to a batch."""
+        return model(
+            batch["input_ids"],
+            labels=batch["labels"] if "labels" in batch else batch["input_ids"].clone(),
+            attention_mask=(
+                batch["attention_mask"]
+                if "attention_mask" in batch
+                else torch.ones_like(batch["input_ids"], dtype=torch.bool)
+            ),
+        )
 
     def compute_loss(self, model, x, return_outputs=False, num_items_in_batch=None):
         """Source: https://github.com/licong-lin/negative-preference-optimization/blob/main/synthetic/mymodel.py"""
 
         ### 1. Run model ###
         x_f, x_r, x_p = x
-        outputs_f = model(
-            x_f["input_ids"],
-            labels=x_f["labels"] if "labels" in x_f else x_f["input_ids"].clone(),
-            attention_mask=(
-                x_f["attention_mask"]
-                if "attention_mask" in x_f
-                else torch.ones_like(x_f["input_ids"], dtype=torch.bool)
-            ),
-        )
+        outputs_f = self._forward_batch(model, x_f)
         loss_f = outputs_f.loss
 
         if "gdr" in self.loss_type or "klr" in self.loss_type:
-            outputs_r = model(
-                x_r["input_ids"],
-                labels=x_r["labels"] if "labels" in x_r else x_r["input_ids"].clone(),
-                attention_mask=(
-                    x_r["attention_mask"]
-                    if "attention_mask" in x_r
-                    else torch.ones_like(x_r["input_ids"], dtype=torch.bool)
-                ),
-            )
+            outputs_r = self._forward_batch(model, x_r)
             loss_r = outputs_r.loss
 
         if (
@@ -131,55 +131,15 @@ class IterativeUnlearner(Trainer):
             or "dpo" in self.loss_type
         ):
             with torch.no_grad():
-                outputs_f_ref = self.ref_model(
-                    x_f["input_ids"],
-                    labels=(
-                        x_f["labels"] if "labels" in x_f else x_f["input_ids"].clone()
-                    ),
-                    attention_mask=(
-                        x_f["attention_mask"]
-                        if "attention_mask" in x_f
-                        else torch.ones_like(x_f["input_ids"], dtype=torch.bool)
-                    ),
-                )
+                outputs_f_ref = self._forward_batch(self.ref_model, x_f)
         if "dpo" in self.loss_type:
             with torch.no_grad():
-                outputs_p_ref = self.ref_model(
-                    x_p["input_ids"],
-                    labels=(
-                        x_p["labels"] if "labels" in x_p else x_p["input_ids"].clone()
-                    ),
-                    attention_mask=(
-                        x_p["attention_mask"]
-                        if "attention_mask" in x_p
-                        else torch.ones_like(x_p["input_ids"], dtype=torch.bool)
-                    ),
-                )
-                outputs_p = model(
-                    x_p["input_ids"],
-                    labels=(
-                        x_p["labels"] if "labels" in x_p else x_p["input_ids"].clone()
-                    ),
-                    attention_mask=(
-                        x_p["attention_mask"]
-                        if "attention_mask" in x_p
-                        else torch.ones_like(x_p["input_ids"], dtype=torch.bool)
-                    ),
-                )
+                outputs_p_ref = self._forward_batch(self.ref_model, x_p)
+                outputs_p = self._forward_batch(model, x_p)
 
         if "klr" in self.loss_type:
             with torch.no_grad():
-                outputs_r_ref = self.ref_model(
-                    x_r["input_ids"],
-                    labels=(
-                        x_r["labels"] if "labels" in x_r else x_r["input_ids"].clone()
-                    ),
-                    attention_mask=(
-                        x_r["attention_mask"]
-                        if "attention_mask" in x_r
-                        else torch.ones_like(x_r["input_ids"], dtype=torch.bool)
-                    ),
-                )
+                outputs_r_ref = self._forward_batch(self.ref_model, x_r)
 
         ### 2. Compute Loss ###
         loss = 0

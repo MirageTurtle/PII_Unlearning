@@ -1,16 +1,18 @@
-from .utils import read_text, pad_or_trim_tensor
+"""Text datasets and batch collation for the unlearning baselines."""
 
-from typing import List, Tuple
-from pathlib import Path
 import json
+from pathlib import Path
 
 import torch
-from torch.utils.data import Dataset
 import torch.nn.functional as F
+from torch.utils.data import Dataset
 from transformers import AutoTokenizer
+
+from .utils import pad_or_trim_tensor, read_text
 
 
 class DefaultDataset(Dataset):
+    """Tokenized examples loaded from JSON records or a text file."""
 
     def __init__(
         self,
@@ -33,7 +35,6 @@ class DefaultDataset(Dataset):
                 if "input_ids" in data[0]:
                     self.input_ids = [torch.tensor(d["input_ids"]) for d in data]
                     return
-                    # Done, since we have `input_ids` ready.
             else:
                 raise ValueError("Format of this `.json` file is not recognized.")
 
@@ -52,7 +53,6 @@ class DefaultDataset(Dataset):
                 self.input_ids.append(encoding)
 
             return
-            # end if Path(file_path).suffix == '.json'
 
         assert Path(file_path).suffix == ".txt"
 
@@ -80,8 +80,6 @@ class DefaultDataset(Dataset):
         # Original strings
         self.strings = tokenizer.batch_decode(self.input_ids, skip_special_tokens=True)
 
-        pass  # def __init__()
-
     def __getitem__(self, index):
         return self.input_ids[index]
 
@@ -90,7 +88,7 @@ class DefaultDataset(Dataset):
 
     def get_collate_fn(self):
 
-        def collate_fn(batch: List[torch.Tensor]):
+        def collate_fn(batch: list[torch.Tensor]):
             batch = torch.stack(batch)
             return {"input_ids": batch, "labels": batch.clone()}
 
@@ -98,6 +96,7 @@ class DefaultDataset(Dataset):
 
 
 class ForgetRetainDataset(DefaultDataset):
+    """Pair forget examples with optional retain and positive examples."""
 
     def __init__(
         self,
@@ -132,33 +131,24 @@ class ForgetRetainDataset(DefaultDataset):
             )
 
     def __getitem__(self, index):
-        if self.retain_exists and self.positive_exists:
-            return (
-                self.forget_dataset[index],
-                self.retain_dataset[index % len(self.retain_dataset)],
-                self.positive_dataset[index % len(self.positive_dataset)],
-            )
-        elif self.retain_exists:
-            return (
-                self.forget_dataset[index],
-                self.retain_dataset[index % len(self.retain_dataset)],
-                None,
-            )
-        elif self.positive_exists:
-            return (
-                self.forget_dataset[index],
-                None,
-                self.positive_dataset[index % len(self.positive_dataset)],
-            )
-        else:
-            return (self.forget_dataset[index], None, None)
+        return (
+            self.forget_dataset[index],
+            self.retain_dataset[index % len(self.retain_dataset)]
+            if self.retain_exists
+            else None,
+            self.positive_dataset[index % len(self.positive_dataset)]
+            if self.positive_exists
+            else None,
+        )
 
     def __len__(self):
         return len(self.forget_dataset)
 
     def get_collate_fn(self):
 
-        def collate_fn(batch: List[Tuple[torch.Tensor, torch.Tensor, torch.Tensor]]):
+        def collate_fn(
+            batch: list[tuple[torch.Tensor, torch.Tensor | None, torch.Tensor | None]],
+        ):
             batch_forget = torch.stack([pair[0] for pair in batch])
             dict_forget = {
                 "input_ids": batch_forget,

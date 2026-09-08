@@ -1,30 +1,47 @@
+"""WHP model wrapper combining target and reinforced-model logits."""
+
 import torch.nn as nn
-from transformers import AutoModelForCausalLM, PreTrainedModel, PretrainedConfig
-from transformers.modeling_outputs import CausalLMOutput
 import torch.nn.functional as F
+from transformers import AutoModelForCausalLM, PretrainedConfig, PreTrainedModel
+from transformers.modeling_outputs import CausalLMOutput
 
 
 class WHPModelForCausalLM(PreTrainedModel):
-    def __init__(self, baseline_name_or_path, reinforced_name_or_path, alpha=1., config=None, **kwargs):
+    """Adjust target-model logits using a reinforced model."""
+
+    def __init__(
+        self,
+        baseline_name_or_path,
+        reinforced_name_or_path,
+        alpha=1.0,
+        config=None,
+        **kwargs,
+    ):
         if config is None:
             config = PretrainedConfig.from_pretrained(baseline_name_or_path)
         super().__init__(config)
-        self.baseline = AutoModelForCausalLM.from_pretrained(baseline_name_or_path, **kwargs)
-        self.reinforced = AutoModelForCausalLM.from_pretrained(reinforced_name_or_path, **kwargs)
+        self.baseline = AutoModelForCausalLM.from_pretrained(
+            baseline_name_or_path, **kwargs
+        )
+        self.reinforced = AutoModelForCausalLM.from_pretrained(
+            reinforced_name_or_path, **kwargs
+        )
         self.alpha = alpha
 
-
-    def forward(self, input_ids=None, attention_mask=None, labels=None, return_dict=True, **kwargs):
-        v_b = self.baseline(input_ids=input_ids,
-                            attention_mask=attention_mask,
-                            labels=labels,
-                            # return_dict=True,
-                            **kwargs)
-        v_r = self.reinforced(input_ids=input_ids,
-                              attention_mask=attention_mask,
-                              labels=labels,
-                            #   return_dict=True,
-                              **kwargs)
+    def forward(
+        self,
+        input_ids=None,
+        attention_mask=None,
+        labels=None,
+        return_dict=True,
+        **kwargs,
+    ):
+        v_b = self.baseline(
+            input_ids=input_ids, attention_mask=attention_mask, labels=labels, **kwargs
+        )
+        v_r = self.reinforced(
+            input_ids=input_ids, attention_mask=attention_mask, labels=labels, **kwargs
+        )
         logits = v_b.logits - self.alpha * F.relu(v_r.logits - v_b.logits)
 
         if not return_dict:
@@ -45,10 +62,12 @@ class WHPModelForCausalLM(PreTrainedModel):
 
         return CausalLMOutput(logits=logits, loss=loss)
 
-
-    def prepare_inputs_for_generation(self, input_ids, past=None, attention_mask=None, **model_kwargs):
-        return self.baseline.prepare_inputs_for_generation(input_ids, past=past, attention_mask=attention_mask, **model_kwargs)
-    
+    def prepare_inputs_for_generation(
+        self, input_ids, past=None, attention_mask=None, **model_kwargs
+    ):
+        return self.baseline.prepare_inputs_for_generation(
+            input_ids, past=past, attention_mask=attention_mask, **model_kwargs
+        )
 
     def _reorder_cache(self, past, beam_idx):
         return self.baseline._reorder_cache(past, beam_idx)
