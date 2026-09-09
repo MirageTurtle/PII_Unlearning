@@ -42,6 +42,8 @@ environment before running unlearning. Pass the local Hugging Face model directo
 Use `--algo` to select a method. Names are case-insensitive; the default is `ga`.
 Run [baseline/unlearn.py](baseline/unlearn.py) directly, supplying the forget set
 with `--data_file` and the output model directory with `--out_dir`.
+Algorithm implementations and shared training utilities live in
+[baseline/core/](baseline/core/).
 
 | Algorithm | Retain data | Positive data |
 | --- | --- | --- |

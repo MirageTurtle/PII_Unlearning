@@ -21,7 +21,7 @@ def main():
         # Direct script execution needs the repository root on the import path.
         sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-    from baseline import finetune, it_unlearn, tv_unlearn
+    from baseline.core import finetune, it_unlearn, tv_unlearn
 
     if args.algo == "tv":
         ft_model_dir = pathjoin(dirname(args.out_dir), basename(args.out_dir) + "_ft")
