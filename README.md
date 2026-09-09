@@ -58,9 +58,13 @@ Algorithm implementations and shared training utilities live in
 | `dpo_klr` | Required | Required |
 | `tv` | Not used | Not used |
 | `idk` | Not used | Not used |
+| `idk_gdr` | Required | Not used |
 | `rl` | Not used | Not used |
+| `rl_gdr` | Required | Not used |
 | `rm` | Not used | Not used |
+| `rm_gdr` | Required | Not used |
 | `whp` | Not used | Not used |
+| `whp_gdr` | Required | Not used |
 
 Supply `--retain_data_file` for GDR and KLR variants and `--positive_data_file`
 for DPO methods. Positive data can use the matching bundled Enron IDK file or
@@ -70,8 +74,9 @@ field. Positive data must match the forget set in sample count and question
 order. Retain data is only accepted by GDR/KLR variants, and positive data is
 only accepted by DPO methods.
 
-`idk`, `rl`, `rm`, and `whp` use the shared [fine-tuning function](baseline/core/finetune.py)
-and save the fine-tuned model directly to `--out_dir`. Supply prepared training
+`idk`, `rl`, `rm`, `whp`, and their `_gdr` variants use the shared
+[fine-tuning function](baseline/core/finetune.py) and save the fine-tuned model
+directly to `--out_dir`. Supply prepared training
 text through `--data_file`: question-refusal examples for IDK, questions with
 randomly reassigned answers for RL, or replacement text for WHP. `rm` follows the
 same training path as `rl` with its own prepared dataset. The WHP route
@@ -79,8 +84,14 @@ implements SFT on externally prepared text, using that text for both inputs and
 labels. This is the simplified text-based variant; preparation of WHP data is a
 separate step.
 
-Examples from the repository root (provide your own retain data for the second
-command):
+For `idk_gdr`, `rl_gdr`, `rm_gdr`, and `whp_gdr`, supply the prepared examples
+through `--data_file` and the original retain examples through `--retain_data_file`.
+Each training step adds the mean supervised loss on the prepared batch to the
+mean supervised loss on the retain batch, with weight 1 for each. An epoch is
+defined by the prepared dataset; retain examples cycle when that dataset is
+longer. These methods train one model without a reference model.
+
+Examples from the repository root (provide your own retain data for GDR methods):
 
 ```bash
 # GA
@@ -120,6 +131,14 @@ python3 baseline/unlearn.py \
   --model_dir ./models/target \
   --data_file baseline/data/enron/idk_text/forget02_idk.json \
   --out_dir ./ckpt/enron/idk/forget_0.2
+
+# IDK with a retain-data loss
+python3 baseline/unlearn.py \
+  --algo idk_gdr \
+  --model_dir ./models/target \
+  --data_file baseline/data/enron/idk_text/forget02_idk.json \
+  --retain_data_file ./data/retain.txt \
+  --out_dir ./ckpt/enron/idk_gdr/forget_0.2
 
 # Check DPO settings and paths without loading a model or starting training
 python3 baseline/unlearn.py \

@@ -9,6 +9,17 @@ from os.path import basename, dirname
 from os.path import join as pathjoin
 from pathlib import Path
 
+SFT_ALGORITHMS = (
+    "idk",
+    "idk_gdr",
+    "rl",
+    "rl_gdr",
+    "rm",
+    "rm_gdr",
+    "whp",
+    "whp_gdr",
+)
+
 
 def main():
     args = get_args()
@@ -43,7 +54,7 @@ def main():
             alpha=args.alpha,
         )
 
-    elif args.algo in {"idk", "rl", "rm", "whp"}:
+    elif args.algo in SFT_ALGORITHMS:
         finetune(
             args.model_dir,
             args.data_file,
@@ -53,6 +64,7 @@ def main():
             learning_rate=args.lr,
             max_len=args.max_len,
             tokenizer_dir=args.tokenizer_dir,
+            retain_data_file=args.retain_data_file,
         )
 
     else:
@@ -90,10 +102,7 @@ def get_args(argv=None):
             "dpo_gdr",
             "dpo_klr",
             "tv",
-            "idk",
-            "rl",
-            "rm",
-            "whp",
+            *SFT_ALGORITHMS,
         ),
         default="ga",
         help="Unlearning method (case-insensitive; default: ga).",
@@ -114,7 +123,7 @@ def get_args(argv=None):
         "--data_file",
         type=str,
         required=True,
-        help="Forget set, or prepared training text for IDK/RL/RM/WHP (.txt or .json).",
+        help="Forget set, or prepared training text for IDK/RL/RM/WHP and their GDR variants (.txt or .json).",
     )
     parser.add_argument(
         "--out_dir",
@@ -131,7 +140,7 @@ def get_args(argv=None):
     parser.add_argument(
         "--resume_from_checkpoint",
         action="store_true",
-        help="Resume training for GA/NPO/DPO methods; unsupported for TV/IDK/RL/RM/WHP.",
+        help="Resume training for GA/NPO/DPO methods and their variants only.",
     )
     parser.add_argument(
         "--dry-run",
@@ -187,7 +196,9 @@ def get_args(argv=None):
     if not needs_positive and args.positive_data_file is not None:
         parser.error("--positive_data_file is only used by DPO methods.")
 
-    if args.resume_from_checkpoint and args.algo in {"tv", "idk", "rl", "rm", "whp"}:
+    if args.resume_from_checkpoint and (
+        args.algo == "tv" or args.algo in SFT_ALGORITHMS
+    ):
         parser.error(f"Cannot resume from checkpoint for {args.algo.upper()}.")
 
     if needs_positive and not args.positive_data_file:
