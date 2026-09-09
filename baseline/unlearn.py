@@ -43,6 +43,18 @@ def main():
             alpha=args.alpha,
         )
 
+    elif args.algo in {"idk", "rl", "rm", "whp"}:
+        finetune(
+            args.model_dir,
+            args.data_file,
+            args.out_dir,
+            epochs=args.epochs,
+            per_device_batch_size=args.per_device_batch_size,
+            learning_rate=args.lr,
+            max_len=args.max_len,
+            tokenizer_dir=args.tokenizer_dir,
+        )
+
     else:
         it_unlearn(
             args.model_dir,
@@ -78,6 +90,10 @@ def get_args(argv=None):
             "dpo_gdr",
             "dpo_klr",
             "tv",
+            "idk",
+            "rl",
+            "rm",
+            "whp",
         ),
         default="ga",
         help="Unlearning method (case-insensitive; default: ga).",
@@ -98,7 +114,7 @@ def get_args(argv=None):
         "--data_file",
         type=str,
         required=True,
-        help="Path to the forget set (.txt or .json).",
+        help="Forget set, or prepared training text for IDK/RL/RM/WHP (.txt or .json).",
     )
     parser.add_argument(
         "--out_dir",
@@ -115,6 +131,7 @@ def get_args(argv=None):
     parser.add_argument(
         "--resume_from_checkpoint",
         action="store_true",
+        help="Resume training for GA/NPO/DPO methods; unsupported for TV/IDK/RL/RM/WHP.",
     )
     parser.add_argument(
         "--dry-run",
@@ -170,8 +187,8 @@ def get_args(argv=None):
     if not needs_positive and args.positive_data_file is not None:
         parser.error("--positive_data_file is only used by DPO methods.")
 
-    if args.resume_from_checkpoint and args.algo == "tv":
-        parser.error("Cannot resume from checkpoint for TV.")
+    if args.resume_from_checkpoint and args.algo in {"tv", "idk", "rl", "rm", "whp"}:
+        parser.error(f"Cannot resume from checkpoint for {args.algo.upper()}.")
 
     if needs_positive and not args.positive_data_file:
         parser.error("--positive_data_file is required for DPO methods.")

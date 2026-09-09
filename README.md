@@ -32,7 +32,7 @@ The intended workflow is:
    `gradient`, `hidden-layer activation`, `CKA`, `knowledge-graph association`, and forgetting scores.
 4. Run the correlation scripts in `analysis/` to measure how those features align with forgetting behavior.
 
-## GA, NPO, DPO, and TV Baselines
+## Running Unlearning Baselines
 
 Train the target model as described in the paper and prepare your training
 environment before running unlearning. Pass the local Hugging Face model directory with
@@ -40,8 +40,8 @@ environment before running unlearning. Pass the local Hugging Face model directo
 `--tokenizer_dir` is provided.
 
 Use `--algo` to select a method. Names are case-insensitive; the default is `ga`.
-Run [baseline/unlearn.py](baseline/unlearn.py) directly, supplying the forget set
-with `--data_file` and the output model directory with `--out_dir`.
+Run [baseline/unlearn.py](baseline/unlearn.py) directly, supplying the method's
+training data with `--data_file` and the output model directory with `--out_dir`.
 Algorithm implementations and shared training utilities live in
 [baseline/core/](baseline/core/).
 
@@ -57,6 +57,10 @@ Algorithm implementations and shared training utilities live in
 | `dpo_gdr` | Required | Required |
 | `dpo_klr` | Required | Required |
 | `tv` | Not used | Not used |
+| `idk` | Not used | Not used |
+| `rl` | Not used | Not used |
+| `rm` | Not used | Not used |
+| `whp` | Not used | Not used |
 
 Supply `--retain_data_file` for GDR and KLR variants and `--positive_data_file`
 for DPO methods. Positive data can use the matching bundled Enron IDK file or
@@ -65,6 +69,15 @@ or `.json` files; JSON must contain a list of strings or objects with a `text`
 field. Positive data must match the forget set in sample count and question
 order. Retain data is only accepted by GDR/KLR variants, and positive data is
 only accepted by DPO methods.
+
+`idk`, `rl`, `rm`, and `whp` use the shared [fine-tuning function](baseline/core/finetune.py)
+and save the fine-tuned model directly to `--out_dir`. Supply prepared training
+text through `--data_file`: question-refusal examples for IDK, questions with
+randomly reassigned answers for RL, or replacement text for WHP. `rm` follows the
+same training path as `rl` with its own prepared dataset. The WHP route
+implements SFT on externally prepared text, using that text for both inputs and
+labels. This is the simplified text-based variant; preparation of WHP data is a
+separate step.
 
 Examples from the repository root (provide your own retain data for the second
 command):
@@ -101,6 +114,13 @@ python3 baseline/unlearn.py \
   --out_dir ./ckpt/enron/tv/forget_0.2 \
   --alpha 1.0
 
+# IDK supervised fine-tuning on prepared refusal examples
+python3 baseline/unlearn.py \
+  --algo idk \
+  --model_dir ./models/target \
+  --data_file baseline/data/enron/idk_text/forget02_idk.json \
+  --out_dir ./ckpt/enron/idk/forget_0.2
+
 # Check DPO settings and paths without loading a model or starting training
 python3 baseline/unlearn.py \
   --algo dpo \
@@ -126,6 +146,8 @@ Training defaults are 5 epochs, learning rate `1e-5`, per-device batch size 2,
 and maximum sequence length 4096. Set `--epochs`, `--lr`,
 `--per_device_batch_size`, and `--max_len` to match your experiment configuration.
 NPO, DPO, and KLR methods automatically load a reference copy of the target model.
+`--resume_from_checkpoint` is supported only by GA, NPO, and DPO methods and
+their GDR/KLR variants.
 
 Use `--help` for all options or append `--dry-run` to validate arguments and paths
 and print the resolved settings as JSON. A dry run does not load models, create
