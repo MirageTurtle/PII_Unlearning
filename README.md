@@ -40,7 +40,8 @@ environment before running unlearning. Pass the local Hugging Face model directo
 `--tokenizer_dir` is provided.
 
 Use `--algo` to select a method. Names are case-insensitive; the default is `ga`.
-All methods use the bundled Enron forget set selected by `--forget_rate`.
+Run [baseline/unlearn.py](baseline/unlearn.py) directly, supplying the forget set
+with `--data_file` and the output model directory with `--out_dir`.
 
 | Algorithm | Retain data | Positive data |
 | --- | --- | --- |
@@ -50,72 +51,85 @@ All methods use the bundled Enron forget set selected by `--forget_rate`.
 | `npo` | Not used | Not used |
 | `npo_gdr` | Required | Not used |
 | `npo_klr` | Required | Not used |
-| `dpo` | Not used | Bundled IDK data by default |
-| `dpo_gdr` | Required | Bundled IDK data by default |
-| `dpo_klr` | Required | Bundled IDK data by default |
+| `dpo` | Not used | Required |
+| `dpo_gdr` | Required | Required |
+| `dpo_klr` | Required | Required |
 | `tv` | Not used | Not used |
 
-Supply `--retain_data_file` for GDR and KLR variants. DPO methods automatically
-select the IDK text file for the chosen forget rate; use `--positive_data_file`
-to supply your own positive responses. Retain and positive inputs accept `.txt`
+Supply `--retain_data_file` for GDR and KLR variants and `--positive_data_file`
+for DPO methods. Positive data can use the matching bundled Enron IDK file or
+your own positive responses. Forget, retain, and positive inputs accept `.txt`
 or `.json` files; JSON must contain a list of strings or objects with a `text`
-field. Custom positive data must match the forget set in sample count and
-question order. Retain data is only accepted by GDR/KLR variants, and positive
-data is only accepted by DPO methods.
+field. Positive data must match the forget set in sample count and question
+order. Retain data is only accepted by GDR/KLR variants, and positive data is
+only accepted by DPO methods.
 
 Examples from the repository root (provide your own retain data for the second
 command):
 
 ```bash
 # GA
-bash baseline/scripts/unlearn_ga_npo_dpo_tv.sh \
+python3 baseline/unlearn.py \
   --algo ga \
   --model_dir ./models/target \
-  --forget_rate 0.2
+  --data_file baseline/data/enron/original_text/forget02.json \
+  --out_dir ./ckpt/enron/ga/forget_0.2
 
 # NPO with a retain-data loss
-bash baseline/scripts/unlearn_ga_npo_dpo_tv.sh \
+python3 baseline/unlearn.py \
   --algo npo_gdr \
   --model_dir ./models/target \
-  --forget_rate 0.2 \
-  --retain_data_file ./data/retain.txt
+  --data_file baseline/data/enron/original_text/forget02.json \
+  --retain_data_file ./data/retain.txt \
+  --out_dir ./ckpt/enron/npo_gdr/forget_0.2
 
 # DPO with the bundled IDK positive responses
-bash baseline/scripts/unlearn_ga_npo_dpo_tv.sh \
+python3 baseline/unlearn.py \
   --algo dpo \
   --model_dir ./models/target \
-  --forget_rate 0.5
+  --data_file baseline/data/enron/original_text/forget05.json \
+  --positive_data_file baseline/data/enron/idk_text/forget05_idk.json \
+  --out_dir ./ckpt/enron/dpo/forget_0.5
 
 # TV with a task-vector scaling coefficient
-bash baseline/scripts/unlearn_ga_npo_dpo_tv.sh \
+python3 baseline/unlearn.py \
   --algo tv \
   --model_dir ./models/target \
-  --forget_rate 0.2 \
+  --data_file baseline/data/enron/original_text/forget02.json \
+  --out_dir ./ckpt/enron/tv/forget_0.2 \
   --alpha 1.0
+
+# Check DPO settings and paths without loading a model or starting training
+python3 baseline/unlearn.py \
+  --algo dpo \
+  --model_dir ./models/target \
+  --data_file baseline/data/enron/original_text/forget05.json \
+  --positive_data_file baseline/data/enron/idk_text/forget05_idk.json \
+  --out_dir ./ckpt/enron/dpo/forget_0.5 \
+  --dry-run
 ```
 
-The script supports Enron forget rates `0.2` and `0.5` (default: `0.2`).
-Each invocation trains one model. The default output is
-`ckpt/enron/ALGO/forget_RATE` under the repository root, using the lowercase
-algorithm name; override it with `--out_dir`.
+Each invocation trains one model unless `--dry-run` is supplied. Data and output
+paths are always explicit; the examples above use the bundled Enron files.
 
 TV first fine-tunes the target on the forget set, saving an intermediate model
 to `<out_dir>_ft`. It then subtracts the scaled fine-tuning weight difference
 from the target and saves the final model to `<out_dir>`. Use `--alpha` to set
-the non-negative scaling coefficient (default: `1.0`); this option is only
-accepted for TV. The shared training options below control TV's fine-tuning
+the non-negative scaling coefficient (default: `1.0`); this option is used only
+by TV. The shared training options below control TV's fine-tuning
 step. The final TV directory currently saves model files; use the original
 tokenizer directory when loading it.
 
-Launcher defaults follow the existing script: 10 epochs, learning rate `1e-5`,
-per-device batch size 1, and maximum sequence length 2048. Set `--epochs`, `--lr`,
+Training defaults are 5 epochs, learning rate `1e-5`, per-device batch size 2,
+and maximum sequence length 4096. Set `--epochs`, `--lr`,
 `--per_device_batch_size`, and `--max_len` to match your experiment configuration.
 NPO, DPO, and KLR methods automatically load a reference copy of the target model.
 
-Use `--help` for all options or append `--dry-run` to check paths and preview the
-command without starting training. Set `PYTHON_BIN` to choose the interpreter in
-your training environment. Data paths are located relative to the script;
-user-supplied relative paths are resolved from the current working directory.
+Use `--help` for all options or append `--dry-run` to validate arguments and paths
+and print the resolved settings as JSON. A dry run does not load models, create
+output directories, or start training; it checks file availability, not model
+compatibility or dataset contents. All relative paths are resolved from the
+current working directory.
 
 ## Analysis Scripts
 
