@@ -205,6 +205,25 @@ output directories, or start training; it checks file availability, not model
 compatibility or dataset contents. All relative paths are resolved from the
 current working directory.
 
+## Evaluating Baseline Checkpoints
+
+[baseline/evaluate.py](baseline/evaluate.py) measures privacy recovery and utility. Provide `--forget_file`, `--retain_file`,
+or both, plus the corresponding ICL files for few-shot evaluation.
+
+```bash
+python3 baseline/evaluate.py \
+  --model_dir ./ckpt/enron/npo_gdr/forget_0.2 \
+  --forget_file baseline/data/enron/original_qa/forget02.json \
+  --retain_file ./data/retain_qa.json \
+  --forget_icl_file ./data/forget_10_shot.json \
+  --retain_icl_file ./data/retain_10_shot.json \
+  --output_file ./results/npo_gdr_scores.json
+```
+
+Use `--k_shot 0` for zero-shot only. Add `--summary_file scores.csv` when a
+single-row table summary is useful, or `--dry-run` to validate inputs without
+loading the model.
+
 ## Analysis Scripts
 
 The main correlation scripts are in `analysis/`: These scripts compute Pearson and Spearman correlation between forgetting scores and different hidden or structural features.
