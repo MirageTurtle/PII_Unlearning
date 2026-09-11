@@ -57,6 +57,7 @@ Algorithm implementations and shared training utilities live in
 | `dpo_gdr` | Required | Required |
 | `dpo_klr` | Required | Required |
 | `tv` | Not used | Not used |
+| `rmu` | Required | Not used |
 | `idk` | Not used | Not used |
 | `idk_gdr` | Required | Not used |
 | `rl` | Not used | Not used |
@@ -66,12 +67,12 @@ Algorithm implementations and shared training utilities live in
 | `whp` | Not used | Not used |
 | `whp_gdr` | Required | Not used |
 
-Supply `--retain_data_file` for GDR and KLR variants and `--positive_data_file`
+Supply `--retain_data_file` for GDR/KLR variants and RMU, and `--positive_data_file`
 for DPO methods. Positive data can use the matching bundled Enron IDK file or
 your own positive responses. Forget, retain, and positive inputs accept `.txt`
 or `.json` files; JSON must contain a list of strings or objects with a `text`
 field. Positive data must match the forget set in sample count and question
-order. Retain data is only accepted by GDR/KLR variants, and positive data is
+order. Retain data is only accepted by GDR/KLR variants and RMU, and positive data is
 only accepted by DPO methods.
 
 `idk`, `rl`, `rm`, `whp`, and their `_gdr` variants use the shared
@@ -91,7 +92,25 @@ mean supervised loss on the retain batch, with weight 1 for each. An epoch is
 defined by the prepared dataset; retain examples cycle when that dataset is
 longer. These methods train one model without a reference model.
 
-Examples from the repository root (provide your own retain data for GDR methods):
+`rmu` uses [baseline/core/rmu.py](baseline/core/rmu.py) to steer forget-set block
+outputs toward one fixed random vector and preserve retain-set outputs using a
+frozen copy of the target model. Its loss is the forget activation MSE plus
+`--rmu_retain_weight` times the retain activation MSE. Both terms exclude padding
+and average over real tokens and hidden dimensions. TXT files contain one
+example per nonblank line; JSON uses the format above. Each epoch visits every
+forget example and cycles retain examples as needed.
+
+Set `--rmu_layer_id` explicitly to the zero-based block index used for both loss
+terms. `--rmu_layer_ids` selects the blocks to update, with all parameters in
+those blocks trainable; it defaults to the loss block alone. Selected blocks
+must be at or before the loss block because later blocks cannot receive
+gradients from this objective. LLaMA-style and GPT-2 block layouts are supported.
+`--rmu_steering_coeff` sets the random vector's norm (default: 20),
+`--rmu_retain_weight` sets the retain-loss weight (default: 100), and
+`--rmu_seed` sets the random seed (default: 42). RMU uses AdamW with a constant
+learning rate and saves both the model and tokenizer.
+
+Examples from the repository root (provide your own retain data when required):
 
 ```bash
 # GA
@@ -132,6 +151,18 @@ python3 baseline/unlearn.py \
   --data_file baseline/data/enron/idk_text/forget02_idk.json \
   --out_dir ./ckpt/enron/idk/forget_0.2
 
+# RMU: measure block 7 outputs and update blocks 5, 6, and 7
+python3 baseline/unlearn.py \
+  --algo rmu \
+  --model_dir ./models/target \
+  --data_file baseline/data/enron/original_text/forget02.json \
+  --retain_data_file ./data/retain.txt \
+  --out_dir ./ckpt/enron/rmu/forget_0.2 \
+  --rmu_layer_id 7 \
+  --rmu_layer_ids 5 6 7 \
+  --rmu_steering_coeff 20 \
+  --rmu_retain_weight 100
+
 # IDK with a retain-data loss
 python3 baseline/unlearn.py \
   --algo idk_gdr \
@@ -164,7 +195,7 @@ tokenizer directory when loading it.
 Training defaults are 5 epochs, learning rate `1e-5`, per-device batch size 2,
 and maximum sequence length 4096. Set `--epochs`, `--lr`,
 `--per_device_batch_size`, and `--max_len` to match your experiment configuration.
-NPO, DPO, and KLR methods automatically load a reference copy of the target model.
+NPO, DPO, KLR, and RMU automatically load a reference copy of the target model.
 `--resume_from_checkpoint` is supported only by GA, NPO, and DPO methods and
 their GDR/KLR variants.
 

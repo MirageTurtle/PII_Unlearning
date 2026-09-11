@@ -32,7 +32,7 @@ def main():
         # Direct script execution needs the repository root on the import path.
         sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-    from baseline.core import finetune, it_unlearn, tv_unlearn
+    from baseline.core import finetune, it_unlearn, rmu_unlearn, tv_unlearn
 
     if args.algo == "tv":
         ft_model_dir = pathjoin(dirname(args.out_dir), basename(args.out_dir) + "_ft")
@@ -52,6 +52,24 @@ def main():
             some_pt_model_dir=args.model_dir,
             some_ft_model_dir=ft_model_dir,
             alpha=args.alpha,
+        )
+
+    elif args.algo == "rmu":
+        rmu_unlearn(
+            args.model_dir,
+            args.data_file,
+            args.out_dir,
+            retain_data_file=args.retain_data_file,
+            layer_id=args.rmu_layer_id,
+            layer_ids=args.rmu_layer_ids,
+            steering_coeff=args.rmu_steering_coeff,
+            retain_weight=args.rmu_retain_weight,
+            seed=args.rmu_seed,
+            epochs=args.epochs,
+            per_device_batch_size=args.per_device_batch_size,
+            learning_rate=args.lr,
+            max_len=args.max_len,
+            tokenizer_dir=args.tokenizer_dir,
         )
 
     elif args.algo in SFT_ALGORITHMS:
@@ -102,6 +120,7 @@ def get_args(argv=None):
             "dpo_gdr",
             "dpo_klr",
             "tv",
+            "rmu",
             *SFT_ALGORITHMS,
         ),
         default="ga",
@@ -154,7 +173,7 @@ def get_args(argv=None):
         "--retain_data_file",
         type=str,
         default=None,
-        help="Path to the retain set file. Required for *_gdr and *_klr.",
+        help="Path to the retain set file. Required for *_gdr, *_klr, and RMU.",
     )
     parser.add_argument(
         "--lr",
@@ -185,19 +204,78 @@ def get_args(argv=None):
         help="Path to the positive data file. Required for DPO methods.",
     )
 
+    rmu_group = parser.add_argument_group("RMU only")
+    rmu_group.add_argument(
+        "--rmu_layer_id",
+        type=int,
+        help="Required for RMU: zero-based block index for the activation loss.",
+    )
+    rmu_group.add_argument(
+        "--rmu_layer_ids",
+        type=int,
+        nargs="+",
+        help="Blocks to update (space-separated). Defaults to the loss block only.",
+    )
+    rmu_group.add_argument(
+        "--rmu_steering_coeff",
+        type=float,
+        help="Norm of the fixed random forget target (default: 20).",
+    )
+    rmu_group.add_argument(
+        "--rmu_retain_weight",
+        type=float,
+        help="Weight of the frozen-target retain MSE (default: 100).",
+    )
+    rmu_group.add_argument(
+        "--rmu_seed",
+        type=int,
+        help="Random seed for RMU steering and training (default: 42).",
+    )
+
     args = parser.parse_args(argv)
 
-    needs_retain = args.algo.endswith(("_gdr", "_klr"))
+    if args.algo == "rmu":
+        if args.rmu_layer_id is None or args.rmu_layer_id < 0:
+            parser.error("RMU requires a non-negative --rmu_layer_id.")
+        if args.rmu_layer_ids is None:
+            args.rmu_layer_ids = [args.rmu_layer_id]
+        if len(set(args.rmu_layer_ids)) != len(args.rmu_layer_ids) or any(
+            index < 0 or index > args.rmu_layer_id for index in args.rmu_layer_ids
+        ):
+            parser.error(
+                "--rmu_layer_ids must be unique indices from 0 to --rmu_layer_id."
+            )
+        for name, default in (
+            ("rmu_steering_coeff", 20.0),
+            ("rmu_retain_weight", 100.0),
+            ("rmu_seed", 42),
+        ):
+            if getattr(args, name) is None:
+                setattr(args, name, default)
+        if not math.isfinite(args.rmu_steering_coeff) or args.rmu_steering_coeff <= 0:
+            parser.error("--rmu_steering_coeff must be a finite positive number.")
+        if not math.isfinite(args.rmu_retain_weight) or args.rmu_retain_weight < 0:
+            parser.error("--rmu_retain_weight must be a finite non-negative number.")
+        if not 0 <= args.rmu_seed < 2**32:
+            parser.error("--rmu_seed must be between 0 and 2**32 - 1.")
+    elif any(
+        value is not None
+        for name, value in vars(args).items()
+        if name.startswith("rmu_")
+    ):
+        parser.error("--rmu_* options are only used by RMU.")
+
+    needs_retain = args.algo == "rmu" or args.algo.endswith(("_gdr", "_klr"))
     needs_positive = args.algo.startswith("dpo")
     if needs_retain and not args.retain_data_file:
         parser.error(f"--retain_data_file is required for {args.algo}.")
     if not needs_retain and args.retain_data_file is not None:
-        parser.error("--retain_data_file is only used by *_gdr and *_klr.")
+        parser.error("--retain_data_file is only used by *_gdr, *_klr, and RMU.")
     if not needs_positive and args.positive_data_file is not None:
         parser.error("--positive_data_file is only used by DPO methods.")
 
     if args.resume_from_checkpoint and (
-        args.algo == "tv" or args.algo in SFT_ALGORITHMS
+        args.algo in ("tv", "rmu") or args.algo in SFT_ALGORITHMS
     ):
         parser.error(f"Cannot resume from checkpoint for {args.algo.upper()}.")
 
